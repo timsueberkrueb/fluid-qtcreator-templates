@@ -1,0 +1,41 @@
+name: %{SnapName}
+version: '0.1.0'
+summary: %{ApplicationSummary}
+description: %{ApplicationSummary}
+grade: devel
+confinement: strict
+
+plugs:
+  platform:
+    interface: content
+    content: liri-platform0
+    target: liri-platform
+    default-provider: liri-platform0
+
+apps:
+  %{SnapName}:
+    command: bin/launch $SNAP/bin/%{ProjectName}
+    plugs:
+      - home
+      - network
+      - x11
+      - opengl
+      - unity7
+      - unity8
+
+parts:
+  app:
+    source: .
+    plugin: qmake
+    qt-version: qt5
+    project-files: [ %{ProjectName} ]
+    build-attributes: ["no-system-libraries"]
+  launcher:
+    plugin: dump
+    source: snap/src
+    organize:
+      launcher.sh: bin/launch
+  runtime:
+    plugin: dump
+    install: |
+      mkdir $SNAPCRAFT_PART_INSTALL/liri-platform

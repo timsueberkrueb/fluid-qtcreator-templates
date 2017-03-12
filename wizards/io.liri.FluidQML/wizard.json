@@ -1,0 +1,36 @@
+{
+    "version": 1,
+    "supportedProjectTypes": [ ],
+    "id": "Q.io.liri.Fluid",
+    "category": "R.Qt",
+    "trDescription": "Creates a QML file with boilerplate code, using Fluid.",
+    "trDisplayName": "QML File (Fluid)",
+    "trDisplayCategory": "Qt",
+    "enabled": "%{JS: [ %{Plugins} ].indexOf('QmlJSEditor') >= 0}",
+
+    "pages" :
+    [
+        {
+            "trDisplayName": "Location",
+            "trShortTitle": "Location",
+            "typeId": "File"
+        },
+        {
+            "trDisplayName": "Project Management",
+            "trShortTitle": "Summary",
+            "typeId": "Summary"
+        }
+    ],
+    "generators" :
+    [
+        {
+            "typeId": "File",
+            "data":
+            {
+                "source": "file.qml.tpl",
+                "target": "%{JS: Util.fileName('%{TargetPath}', '%{JS: Util.preferredSuffix('text/x-qml')}')}",
+                "openInEditor": true
+            }
+        }
+    ]
+}

@@ -1,0 +1,234 @@
+{
+    "version": 1,
+    "supportedProjectTypes": [ "Qt4ProjectManager.Qt4Project" ],
+    "id": "V.io.liri.FluidProject",
+    "category": "F.Application",
+    "trDescription": "Creates a Qt Quick 2 application using Qt Quick Controls 2 and Fluid.<br/><br/><b>Note:</b> Works with with Qt 5.8 and later.",
+    "trDisplayName": "Fluid Application",
+    "trDisplayCategory": "Application",
+    "featuresRequired": [ "QtSupport.Wizards.FeatureQtQuick.Controls.2" ],
+    "enabled": "%{JS: [ %{Plugins} ].indexOf('QmakeProjectManager') >= 0}",
+
+    "options":
+    [
+        { "key": "ProFileName", "value": "%{JS: Util.fileName('%{ProjectDirectory}/%{ProjectName}', 'pro')}" },
+        { "key": "MainCppFileName", "value": "%{JS: 'main.' + Util.preferredSuffix('text/x-c++src')}" },
+        { "key": "QtQuickVersion", "value": "2.8" },
+        { "key": "QtQuickControls2Version", "value": "2.0" },
+        { "key": "QtQuickDialogsVersion", "value": "1.0" },
+        { "key": "QtQuickLayoutsVersion", "value": "1.0" },
+        { "key": "FluidControlsVersion", "value": "1.0" }
+    ],
+
+    "pages":
+    [
+        {
+            "trDisplayName": "Project Location",
+            "trShortTitle": "Location",
+            "typeId": "Project"
+        },
+        {
+            "trDisplayName": "Define Project Details",
+            "trShortTitle": "Details",
+            "typeId": "Fields",
+            "data":
+            [
+                {
+                    "name": "ApplicationTitle",
+                    "trDisplayName": "Application title:",
+                    "type": "LineEdit",
+                    "data":
+                    {
+                        "trText": "Fluid Application"
+                    }
+                },
+                {
+                    "name": "ApplicationSummary",
+                    "trDisplayName": "Application summary:",
+                    "type": "LineEdit",
+                    "data":
+                    {
+                        "trText": "An application using Fluid"
+                    }
+                },
+                {
+                    "name": "ApplicationLicense",
+                    "trDisplayName": "License:",
+                    "type": "ComboBox",
+                    "data":
+                    {
+                        "index": 0,
+                        "items":
+                        [
+                            {
+                                "trKey": "GPL 3",
+                                "value": "GPLv3"
+                            },
+                            {
+                                "trKey": "GPL 2",
+                                "value": "GPLv2"
+                            },
+                            {
+                                "trKey": "MIT",
+                                "value": "MIT"
+                            },
+                            {
+                                "trKey": "Other",
+                                "value": "other"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "AddReadme",
+                    "trDisplayName": "Add README.md",
+                    "type": "CheckBox",
+                    "data": {
+                        "checkedValue": "yes",
+                        "uncheckedValue": "no",
+                        "checked": true
+                    }
+                },
+                {
+                    "name": "ControlsStyle",
+                    "trDisplayName": "Qt Quick Controls 2 Style:",
+                    "type": "ComboBox",
+                    "data":
+                    {
+                        "index": 1,
+                        "items":
+                        [
+                            {
+                                "trKey": "Default",
+                                "value": "Default"
+                            },
+                            {
+                                "trKey": "Material",
+                                "value": "Material"
+                            },
+                            {
+                                "trKey": "Universal",
+                                "value": "Universal"
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "trDisplayName": "Packaging",
+            "trShortTitle": "Packaging",
+            "typeId": "Fields",
+            "enabled": "%{IsTopLevelProject}",
+            "data":
+            [
+                {
+                    "name": "SnapLabel",
+                    "span": true,
+                    "type": "Label",
+                    "data": {
+                        "trText": "<b>Snap Packaging</b>"
+                    }
+                },
+                {
+                    "name": "SnapName",
+                    "trDisplayName": "Snap name:",
+                    "type": "LineEdit",
+                    "enabled": "%{JS: '%{SnapEnabled}' === 'yes' }",
+                    "data":
+                    {
+                        "trText": "fluid-app",
+                        "validator": "^[a-z0-9][a-z0-9+-]*$"
+                    }
+                },
+                {
+                    "name": "SnapEnabled",
+                    "trDisplayName": "Add Snap packaging data",
+                    "type": "CheckBox",
+                    "data": {
+                        "checkedValue": "yes",
+                        "uncheckedValue": "no",
+                        "checked": true
+                    }
+                }
+            ]
+        },
+        {
+            "trDisplayName": "Kit Selection",
+            "trShortTitle": "Kits",
+            "typeId": "Kits",
+            "enabled": "%{IsTopLevelProject}",
+            "data": { "projectFilePath": "%{ProFileName}" }
+        },
+        {
+            "trDisplayName": "Project Management",
+            "trShortTitle": "Summary",
+            "typeId": "Summary"
+        }
+    ],
+    "generators":
+    [
+        {
+            "typeId": "File",
+            "data":
+            [
+                {
+                    "source": "app.pro",
+                    "target": "%{ProFileName}",
+                    "openAsProject": true
+                },
+                {
+                    "source": "main.cpp",
+                    "target": "%{ProjectDirectory}/src/%{MainCppFileName}",
+                    "openInEditor": true
+                },
+                {
+                    "source": "Main.qml",
+                    "target": "%{ProjectDirectory}/src/ui/Main.qml",
+                    "openInEditor": true
+                },
+                {
+                    "source": "ui.qrc",
+                    "target": "%{ProjectDirectory}/src/ui/ui.qrc"
+                },
+                {
+                    "source": "licenses/LICENSE.GPLv3",
+                    "target": "%{ProjectDirectory}/LICENSE.GPLv3",
+                    "condition": "%{JS: '%{ApplicationLicense}' === 'GPLv3'}"
+                },
+                {
+                    "source": "licenses/LICENSE.GPLv2",
+                    "target": "%{ProjectDirectory}/LICENSE.GPLv2",
+                    "condition": "%{JS: '%{ApplicationLicense}' === 'GPLv2'}"
+                },
+                {
+                    "source": "licenses/LICENSE.MIT",
+                    "target": "%{ProjectDirectory}/LICENSE.MIT",
+                    "condition": "%{JS: '%{ApplicationLicense}' === 'MIT'}"
+                },
+                {
+                    "source": "README.md",
+                    "target": "%{ProjectDirectory}/README.md",
+                    "condition": "%{JS: '%{AddReadme}' === 'yes'}"
+                },
+                {
+                    "source": "packaging/snap/snapcraft.yaml",
+                    "target": "%{ProjectDirectory}/snap/snapcraft.yaml",
+                    "condition": "%{JS: '%{SnapEnabled}' === 'yes'}"
+                },
+                {
+                    "source": "packaging/snap/plugins/x-qmake.py",
+                    "target": "%{ProjectDirectory}/snap/plugins/x-qmake.py",
+                    "condition": "%{JS: '%{SnapEnabled}' === 'yes'}",
+                    "isBinary": true
+                },
+                {
+                    "source": "packaging/snap/src/launcher.sh",
+                    "target": "%{ProjectDirectory}/snap/src/launcher.sh",
+                    "condition": "%{JS: '%{SnapEnabled}' === 'yes'}",
+                    "isBinary": true
+                }
+            ]
+        }
+    ]
+}
